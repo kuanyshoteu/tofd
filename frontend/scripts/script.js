@@ -66,34 +66,42 @@ function get_data() {
 function send_data(){
 	mail = document.getElementById('mail_input').value
 	password = document.getElementById('password_input').value
-	console.log('x', mail, password)
-
-	c = "Hello"
-	d = " world"
-	e = c + d
-
     response = fetch("/api/reg_user?mail="+mail+"&password=" + password);
     response.json().then(data => {
         alert(data.fm)
     })
 }
 // --------------------------------------------------------
-data_music = [
-	["Modern Talking", "Cherry Cherry Lady", "/frontend/music/1.mp3"], 
-	["Bruno Mars", "Talking", "/frontend/music/2.mp3"],
-]
 musicBox = document.getElementById("music_box")
 show_audio_tracks()
-function show_audio_tracks(){
-	for(var i = 0; i < data_music.length; i++){
-		artist = data_music[i][0]
-		song_name = data_music[i][1]
-		link = data_music[i][2]
-		orig = document.getElementById("original_audio")
-		newAudio = orig.cloneNode(true)
-		newAudio.getElementsByClassName("artist_name")[0].innerHTML = artist
-		newAudio.getElementsByClassName("song_name")[0].innerHTML = song_name
-		newAudio.getElementsByClassName("audio_source")[0].setAttribute("src", link)
-		musicBox.appendChild(newAudio)		
-	}
+async function show_audio_tracks(){
+    response = await fetch("/api/getplaylist");
+    response.json().then(data => {
+    	data_music = data.data_music
+		for(var i = 0; i < data_music.length; i++){
+			artist = data_music[i][0]
+			song_name = data_music[i][1]
+			link = data_music[i][2]
+			orig = document.getElementById("original_audio")
+			newAudio = orig.cloneNode(true)
+			newAudio.getElementsByClassName("artist_name")[0].innerHTML = artist
+			newAudio.getElementsByClassName("song_name")[0].innerHTML = song_name
+			newAudio.getElementsByClassName("audio_source")[0].setAttribute("src", link)
+			musicBox.appendChild(newAudio)		
+		}
+    })
+}
+
+
+
+// -----------------------------------------------
+function upload_track(){
+	song_name = document.getElementById('song_name_input').value
+	artist = document.getElementById('artist_input').value
+	link = document.getElementById('link_input').value
+
+    response = fetch("/api/upload_track?song_name="+song_name+"&artist=" + artist + "&link="+link);
+    response.json().then(data => {
+        alert(data.ok)
+    })
 }

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
-from playlist.models import Playlist
+from playlist.models import Playlist, Track
 
 def main(request):
     like = 0
@@ -13,7 +13,7 @@ def main(request):
         "land_type":"about",
         "name": "arsen",
     }
-    return render(request, "index.html", context)
+    return render(request, "main.html", context)
     
 def about(request):
     context = {
@@ -24,6 +24,11 @@ def sign_in(request):
     context = {
     }
     return render(request, "sign_in.html", context)
+
+def upload_track_page(request):
+    context = {
+    }
+    return render(request, "create_track.html", context)
     
 def reg_user(request):
     name = request.GET.get("mail")
@@ -31,3 +36,32 @@ def reg_user(request):
     data = {
     }
     return JsonResponse(data)
+
+def upload_track(request):
+    song_name = request.GET.get("song_name")
+    artist = request.GET.get("artist")
+    link = request.GET.get("link")
+    
+    Track.objects.create(
+        name=song_name,
+        artist=artist,
+        link=link,
+        )
+    data = {
+        "ok":"VSE POLUCHILOSЬ"
+    }
+    return JsonResponse(data)
+
+
+def getplaylist(request):
+    tracks = Track.objects.all()
+    data_music = []
+    for i in range(0, len(tracks)):
+        track = tracks[i]
+        data_music.append([track.artist, track.name, track.link])
+    data = {
+        "data_music":data_music,
+    }
+    return JsonResponse(data)
+
+

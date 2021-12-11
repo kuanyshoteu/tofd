@@ -12,3 +12,9 @@ class Playlist(models.Model):
     image = models.ImageField(upload_to=upload_location, blank = True,null = True)
     listenings = models.IntegerField(blank = True,null = True,default=0)
 
+class Track(models.Model):
+    name = models.TextField(blank = True,null = True,default='My Song')
+    artist = models.TextField(blank = True,null = True,default='My Artist')
+    link = models.TextField(blank = True,null = True,default='My link')
+    listenings = models.IntegerField(blank = True,null = True,default=0)
+

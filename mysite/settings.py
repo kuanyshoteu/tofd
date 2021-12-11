@@ -124,6 +124,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/frontend/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "frontend/images")
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
