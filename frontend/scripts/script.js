@@ -86,7 +86,7 @@ async function show_audio_tracks(){
 			newAudio = orig.cloneNode(true)
 			newAudio.getElementsByClassName("artist_name")[0].innerHTML = artist
 			newAudio.getElementsByClassName("song_name")[0].innerHTML = song_name
-			newAudio.getElementsByClassName("audio_source")[0].setAttribute("src", link)
+			newAudio.getElementsByClassName("audio_source")[0].setAttribute("src", "/frontend/music/"+link)
 			musicBox.appendChild(newAudio)		
 		}
     })
@@ -98,10 +98,16 @@ async function show_audio_tracks(){
 function upload_track(){
 	song_name = document.getElementById('song_name_input').value
 	artist = document.getElementById('artist_input').value
-	link = document.getElementById('link_input').value
+	file_input = document.getElementById("file_input")
+	data = new FormData()
+	data.append('file', file_input.files[0])
+	data.append('song_name', song_name)
+	data.append('artist', artist)
+	csrf = document.getElementById('csrftoken').getAttribute('csrf')
+	data.append('csrfmiddlewaretoken', csrf)
 
-    response = fetch("/api/upload_track?song_name="+song_name+"&artist=" + artist + "&link="+link);
-    response.json().then(data => {
-        alert(data.ok)
-    })
+	fetch('/api/upload_track/', {
+	  method: 'POST',
+	  body: data
+	})	
 }

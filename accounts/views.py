@@ -38,17 +38,17 @@ def reg_user(request):
     return JsonResponse(data)
 
 def upload_track(request):
-    song_name = request.GET.get("song_name")
-    artist = request.GET.get("artist")
-    link = request.GET.get("link")
-    
-    Track.objects.create(
+    song_name = request.POST.get("song_name")
+    artist = request.POST.get("artist")
+    track = Track.objects.create(
         name=song_name,
         artist=artist,
-        link=link,
         )
+    if request.FILES.get('file'):
+        track.file = request.FILES.get('file')
+        track.save()
     data = {
-        "ok":"VSE POLUCHILOSЬ"
+        "ok":True,
     }
     return JsonResponse(data)
 
@@ -58,7 +58,11 @@ def getplaylist(request):
     data_music = []
     for i in range(0, len(tracks)):
         track = tracks[i]
-        data_music.append([track.artist, track.name, track.link])
+        data_music.append([
+            track.artist, 
+            track.name, 
+            track.file.url
+            ])
     data = {
         "data_music":data_music,
     }

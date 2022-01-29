@@ -9,7 +9,8 @@
 </head>
 <body>
 	{% include "header.html" %}
-	{% block content %}{% endblock content %}	
+	{% block content %}{% endblock content %}
+	<span style="display:none" csrf="{{ csrf_token }}" id="csrftoken"></span>
 	<script type="text/javascript" src="{% static 'scripts/script.js' %}"></script>
 </body>
 </html>
